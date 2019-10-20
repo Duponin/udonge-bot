@@ -6,6 +6,9 @@ from mastodon import Mastodon
 
 # --------------------------------------------------
 
+BAN_TAGS = [ 'no_panties', 'comic', 'nipples', 'unhappy' ]
+UNSAFE_TAGS = [ 'swimsuit', 'underwear', 'ass', 'large_breasts' ]
+
 def main():
 
     mastodon = Mastodon(
@@ -34,8 +37,8 @@ def main():
         filetagstring = data[0]['tag_string']
 
         # we don't want comics, porn and lowscored arts
-        b_still_e = 'no panties' not in filetagstring and 'comic' not in filetagstring and 'nipples' not in filetagstring
-        if b_still_e and filesafe != 'e' and filescore >= 10:
+        if (filesafe != 'e' and filescore >= 25
+            and any(tag not in filetagstring.strip().split() for tag in BAN_TAGS)):
             b_success = True
 
     fformat = op.splitext(fileurl)[1][1:]
@@ -51,8 +54,10 @@ def main():
 
     toot  = f'{tags}\nhttps://danbooru.donmai.us/posts/{fileid}'
 
-    # is it 's'afe, free from swimsuits and underwear tags
-    b_sensetive = 's' != filesafe or 'swimsuit' in filetagstring or 'underwear' in filetagstring
+    # is it 's'afe, free from swimsuits and underwear tags, etc
+    b_sensetive = ('s' != filesafe
+                   or any(tag in filetagstring.strip().split() for tag in UNSAFE_TAGS))
+
     mastodon.status_post(toot, media_ids=[media], visibility='unlisted', sensitive=b_sensetive)
 
 if __name__ == '__main__':
