@@ -6,9 +6,6 @@ from mastodon import Mastodon
 
 # --------------------------------------------------
 
-BAN_TAGS = [ 'no_panties', 'comic', 'nipples', 'unhappy' ]
-UNSAFE_TAGS = [ 'swimsuit', 'underwear', 'ass', 'large_breasts' ]
-
 def main():
 
     mastodon = Mastodon(
@@ -26,19 +23,20 @@ def main():
         r = requests.get(url = URL, params = PARAMS) 
         data = r.json()
 
-        fileurl    = data[0]['file_url']
+        fileurl = data[0]['file_url']
         print('url ', fileurl)
-        fileid     = data[0]['id']
+        fileid = data[0]['id']
         print('id ', fileid)
-        filescore  = data[0]['fav_count']
+        filescore = data[0]['fav_count']
         print('score ', filescore)
-        filesafe   = data[0]['rating']
+        filesafe = data[0]['rating']
         print('rating ', filesafe)
         filetagstring = data[0]['tag_string']
 
-        # we don't want comics, porn and lowscored arts
-        if (filesafe != 'e' and filescore >= 25
-            and any(tag not in filetagstring.strip().split() for tag in BAN_TAGS)):
+        # we don't want comics and lowscored arts
+        if (filesafe == 's' and filescore >= 25
+            and 'comic'   not in filetagstring
+            and 'unhappy' not in filetagstring):
             b_success = True
 
     fformat = op.splitext(fileurl)[1][1:]
@@ -47,16 +45,15 @@ def main():
     if (fformat == 'jpg'):
         fformat = 'jpeg'
     media = mastodon.media_post(requests.get(fileurl).content, f'image/{fformat}')
-
-    tags = '#touhou #reisen '
-    if ('s' == filesafe):
-        tags += '#cuteposting'
+    tags = '#touhou #reisen #cuteposting'
 
     toot  = f'{tags}\nhttps://danbooru.donmai.us/posts/{fileid}'
 
     # is it 's'afe, free from swimsuits and underwear tags, etc
-    b_sensetive = ('s' != filesafe
-                   or any(tag in filetagstring.strip().split() for tag in UNSAFE_TAGS))
+    b_sensetive = ('underwear' in filetagstring
+                    or 'large_breasts' in filetagstring
+                    or 'ass' in filetagstring
+                    or 'swimsuit' in filetagstring)
 
     mastodon.status_post(toot, media_ids=[media], visibility='unlisted', sensitive=b_sensetive)
 
