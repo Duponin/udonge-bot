@@ -19,7 +19,7 @@ def main():
 
         # If didn't receive a single entity, we should try again.
         # If failed another time, shutdown!
-        if data.count() == 0:
+        if data.count == 0:
             if rejected_once == True:
                 return
             rejected_once = True
