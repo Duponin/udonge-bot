@@ -14,7 +14,7 @@ def main():
     )
 
     URL    = "https://danbooru.donmai.us/posts.json"
-    PARAMS = { 'tags': '1girl reisen_udongein_inaba',
+    PARAMS = { 'tags': 'reisen_udongein_inaba 1girl',
                'limit': 1,
                'random': True } 
 
@@ -36,7 +36,9 @@ def main():
         # we don't want comics and lowscored arts
         if (filesafe == 's' and filescore >= 25
             and 'comic'   not in filetagstring
-            and 'unhappy' not in filetagstring):
+            and 'unhappy' not in filetagstring
+            and 'nazi' not in filetagstring
+            and 'blood' not in filetagstring):
             b_success = True
 
     fformat = op.splitext(fileurl)[1][1:]
@@ -45,9 +47,9 @@ def main():
     if (fformat == 'jpg'):
         fformat = 'jpeg'
     media = mastodon.media_post(requests.get(fileurl).content, f'image/{fformat}')
-    tags = '#touhou #reisen #cuteposting'
+    tags = '#touhou #reisen #udongein #reisenbot'
 
-    toot  = f'{tags}\nhttps://danbooru.donmai.us/posts/{fileid}'
+    toot  = f':love_reisen: {tags}\nhttps://danbooru.donmai.us/posts/{fileid}'
 
     # is it 's'afe, free from swimsuits and underwear tags, etc
     b_sensetive = ('underwear' in filetagstring
