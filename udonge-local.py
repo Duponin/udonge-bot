@@ -5,6 +5,7 @@ import os
 import os.path as op
 
 from mastodon import Mastodon
+from datetime import datetime
 
 # --------------------------------------------------
 
@@ -23,7 +24,6 @@ def main():
 
     fformat = op.splitext(art)[1][1:]
 
-    print(fformat)
     if (fformat == 'jpg'):
         fformat = 'jpeg'
 
@@ -36,6 +36,7 @@ def main():
     toot  = f':love_reisen: {tags}'
 
     mastodon.status_post(toot, media_ids=[media], visibility='unlisted', sensitive=True)
+    print(str(datetime.now()) + ': ' + art)
 
 if __name__ == '__main__':
     sys.exit(main())
