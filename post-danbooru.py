@@ -12,28 +12,28 @@ def main():
         access_token = 'token.dat',
         api_base_url = 'https://social.inex.rocks/'
     )
-    
-    with open('tags.dat', 'rb') as dat:
-        tags = dat.read()
+
+    with open('tags.dat', 'r') as dat:
+        tags = dat.readlines()
 
     URL = "https://danbooru.donmai.us/posts.json"
     LIMIT = 10
     MIN_SCORE = 25
     SAFETY = 's'
-    TAGS_POST = tags[0].strip().split()
+    TAGS_POST = tags[0].strip()
     TAGS_FORBID = tags[1].strip().split()
     TAGS_SENSITIVE = tags[2].strip().split()
-    
+
     PARAMS = { 'tags': TAGS_POST,
                'limit': LIMIT,
                'random': True } 
-    
+
     print('[start] Settings:')
     print('LIMIT = ' + str(LIMIT) + ' | MIN_SCORE = ' + str(MIN_SCORE) + ' | SAFETY = ' + SAFETY)
     print('TAGS_POST=' + str(TAGS_POST))
     print('TAGS_FORBID=' + str(TAGS_FORBID))
-    print('TAGS_SENSITIVE=' + str(TAGS_SENSITIVE))
-               
+    print('TAGS_SENSITIVE=' + str(TAGS_SENSITIVE) + '\n')
+
 # --------------------------------------------------
 
     counter = 1
@@ -52,25 +52,26 @@ def main():
             filesafe = data[i]['rating']
             print('rating ', filesafe)
             filetagstring = data[i]['tag_string']
+            print('tags ', filetagstring)
+            pulledtags = filetagstring.split()
 
             if (filesafe == SAFETY and filescore >= MIN_SCORE
-                and not set(filetagstring).intersection(TAGS_FORBID):
-                print('[success] Found ' + fileurl)
+                and not set(pulledtags).intersection(TAGS_FORBID)):
+                print('[success] Found!')
                 b_search = False
-                break;
-        print('[fail] No acceptable arts.')
-                
+                break
+
 # --------------------------------------------------
 
     fformat = op.splitext(fileurl)[1][1:]
     if (fformat == 'jpg'):
         fformat = 'jpeg'
-        
-    media = mastodon.media_post(requests.get(fileurl).content, f'image/{fformat}')
-    toot  = f':love_reisen: \nhttps://danbooru.donmai.us/posts/{fileid}'
 
-    b_sensetive = set(filetagstring).intersection(TAGS_SENSITIVE)
-                    
+    media = mastodon.media_post(requests.get(fileurl).content, f'image/{fformat}')
+    toot  = f':love_reisen: https://danbooru.donmai.us/posts/{fileid}'
+
+    b_sensetive = bool(set(pulledtags).intersection(TAGS_SENSITIVE))
+
     if (b_sensetive):
         print('[success] Marked as sensitive.')
 
