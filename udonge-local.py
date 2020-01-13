@@ -23,7 +23,6 @@ def main():
     art = DIR + random.choice(onlyfiles)
 
     fformat = op.splitext(art)[1][1:]
-
     if (fformat == 'jpg'):
         fformat = 'jpeg'
 
@@ -31,9 +30,7 @@ def main():
         data = picture.read()
 
     media = mastodon.media_post(data, f'image/{fformat}')
-    tags = '#touhou #udongein #reisenbot'
-
-    toot  = f':love_reisen: {tags}'
+    toot  = f':love_reisen:'
 
     mastodon.status_post(toot, media_ids=[media], visibility='unlisted', sensitive=True)
     print(str(datetime.now()) + ': ' + art)
