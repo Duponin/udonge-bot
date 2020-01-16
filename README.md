@@ -35,7 +35,7 @@ python3 -m pip install --upgrade pip
 python3 -m pip install -r requirements.txt
 ```
 ### For posting you have two ways: ###
-* 1) Use arts from local folder /sources. In this case you should either manually move them to the destination or
+* First way: use arts from local folder /sources. In this case you should either manually move them to the destination or
 * (venv) ...download them by:
 ```bash
 python3 download.py
@@ -46,7 +46,7 @@ deactivate
 #!/bin/bash
 venv/bin/python3 post-local.py
 ```
-* 2) Repost each art from danbooru! In this case you don't have to story anything on your local storage, but this way it's much harder to control quality of arts!
+* Second way: repost each art from danbooru! In this case you don't have to story anything on your local storage, but this way it's much harder to control quality of arts!
 * Save the script as `runner`:
 ```bash
 #!/bin/bash
