@@ -19,6 +19,6 @@ python3 download.py
 #second line is for tags you decline from posting completely (as many as you want)
 #third line is for tags you want mastodon to mark as sensitive (as many as you want)
 ```
-* Don't forget to setup your bot account, get access tokens and establish the enviroment around it. I am not providing any instructions of doing it, since all the steps are different and depend on what, where and how you want to run the bot.
+* Don't forget to setup your bot account, get access tokens and establish the environment around it. I am not providing any instructions of how to do it, since all the steps are different and depend on what, where and how you want to run the bot.
 
 * That's all!
