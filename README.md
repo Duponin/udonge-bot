@@ -6,7 +6,7 @@ Currently posting on: https://social.inex.rocks/@ReisenBot
 
 ### For posting you have two ways: ###
 * First way: use arts from local folder /sources. In this case you should either manually move them to the destination or
-* (venv) ...download them by:
+* ...download them by:
 ```bash
 python3 download.py
 ``` 
